@@ -37,7 +37,6 @@ class SomeSort:
         },
     ]
 
-
     def none_is_head(self):
         """
         text: None を先頭にasc
