@@ -1,0 +1,16 @@
+code,name,value
+kokumin_nenkin,国民年金保険料,10000
+shokuhi01,1月の食費,10000
+shokuhi02,2月の食費,20000
+shokuhi03,3月の食費,30000
+shokuhi04,4月の食費,40000
+shokuhi05,5月の食費,50000
+shokuhi06,6月の食費,60000
+shokuhi07,7月の食費,70000
+shokuhi08,8月の食費,80000
+shokuhi09,9月の食費,90000
+shokuhi10,10月の食費,100000
+shokuhi11,11月の食費,110000
+shokuhi12,12月の食費,120000
+car_tax,自動車税,40000
+適当コード,適当コード名,適当な値
