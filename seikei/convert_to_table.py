@@ -10,19 +10,42 @@ BODY_SEPARATOR = ','
 
 def get_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("filename", help="please set me", type=str)
-    parser.add_argument("--title-separator", type=str, default=TITLE_SEPARATOR)
-    parser.add_argument("--body-separator", type=str, default=BODY_SEPARATOR)
-
+    parser.add_argument(
+        "filename",
+        type=str,
+        help="set target filename",
+    )
+    parser.add_argument(
+        "--title-separator",
+        type=str,
+        help="(default is ',')",
+        default=TITLE_SEPARATOR,
+    )
+    parser.add_argument(
+        "--body-separator",
+        type=str,
+        help="(default is ',')",
+        default=BODY_SEPARATOR,
+    )
+    parser.add_argument(
+        "--fill",
+        help="(default is False)",
+        action='store_true',
+    )
     args = parser.parse_args()
     return(args)
 
 
 class MarkdownTableConverter:
 
-    def __init__(self, title_separator=TITLE_SEPARATOR, body_separator=BODY_SEPARATOR):
+    def __init__(self,
+                 title_separator=TITLE_SEPARATOR,
+                 body_separator=BODY_SEPARATOR,
+                 is_fill: bool = False):
+
         self.title_separator = title_separator
         self.body_separator = body_separator
+        self.is_fill = is_fill
 
     def convert(self, filename: str):
         titles, rows = self._read_data(filename)
@@ -66,6 +89,9 @@ class MarkdownTableConverter:
         return w
 
     def _make_text(self, text, length):
+        if not self.is_fill:
+            return text
+
         width = self._calc_text_width(text)
         fill_num = length - width
         return text + ' ' * fill_num
@@ -75,7 +101,7 @@ class MarkdownTableConverter:
         one = []
         for key, val in length_data.items():
             none_line.append(separator)
-            none_line.append('-' * val)
+            none_line.append(self._make_text('----', val))
             one.append(separator)
             one.append(self._make_text(key, val))
 
@@ -95,14 +121,17 @@ class MarkdownTableConverter:
 
 if __name__ == '__main__':
     """
-    usage1: only filename
+    usage1
     $ python convert_to_table.py sample.txt
 
-    usage2: filename and title_separator
+    usage2
     $ python convert_to_table.py sample.txt --title-separator=,
 
-    usage3: all
+    usage3
     $ python convert_to_table.py sample.txt --title-separator=, --body-separator=,
+
+    usage4
+    $ python convert_to_table.py sample.txt --title-separator=, --body-separator=, --fill
 
     Example
     >>> python for_markdown_table.py data1.txt
@@ -125,8 +154,10 @@ if __name__ == '__main__':
     |適当コード    |適当コード名  |適当な値|
     """
     args = get_args()
+    print(args.fill)
     app = MarkdownTableConverter(
         title_separator=args.title_separator,
         body_separator=args.body_separator,
+        is_fill=args.fill,
     )
     app.convert(args.filename)
